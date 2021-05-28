@@ -8,7 +8,7 @@ WordPress等に埋め込むための、パスワード付きのリンクを生�
 
 1. 下記URLにアクセスする
 
-  https://macrat.github.io/password-link-generator
+   https://macrat.github.io/password-link-generator
 
 2. 「設定」の欄にラベルやURL、パスワードを入力する
 
