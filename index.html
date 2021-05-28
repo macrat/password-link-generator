@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>パスワード付きリンク生成ツール</title>
+    <meta charset=utf-8 />
+    <meta name=viewport content="initial-scale=1; width=device-width" />
+    <script src="https://unpkg.com/mustache@4.2.0/mustache.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/aes-js@3.1.2/index.js"></script>
+</head>
+
+<body>
+<template id=template><form id="ir_password_link_block">
+    <label>{{ inputLabel }} <input type="password" /></label>
+    <button type="submit">{{ buttonLabel }}</button>
+
+    <script type="text/javascript" src="https://unpkg.com/aes-js@3.1.2/index.js"></script>
+    <script>
+document.querySelector('#ir_password_link_block').addEventListener('submit', function meetingOfShareholdersYouTubeOnSubmit(event) {
+  event.preventDefault();
+
+  const password = document.querySelector('#ir_password_link_block input').value.padEnd(16, ' ');
+  if (!password) {
+    alert('パスワードを入力してください。');
+    return;
+  } else if (password.length > 16) {
+    alert('パスワードが違います。\n大文字・小文字にご注意の上、もう一度お試しください。');
+    return;
+  }
+
+  const key = aesjs.utils.utf8.toBytes(password);
+
+  const encrypted = aesjs.utils.hex.toBytes('{{ encryptedPassword }}');
+  const aes = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5));
+  const url = aesjs.utils.utf8.fromBytes(aes.decrypt(encrypted));
+
+  if (!url.startsWith('https://')) {
+    alert('パスワードが違います。\n大文字・小文字にご注意の上、もう一度お試しください。');
+    return;
+  }
+  location.href = url;
+});
+    </script>
+
+    <style>
+#ir_password_link_block {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+#ir_password_link_block input {
+    box-sizing: border-box;
+    font-size: 100%;
+    padding: 6px 14px;
+}
+#ir_password_link_block button {
+    background-color: #dd000c;
+    color: white;
+    font-size: 100%;
+    font-weight: bold;
+    padding: 6px 14px;
+    border: none;
+    margin: 0 0 0 4px;
+}
+#ir_password_link_block button:hover {
+    opacity: .7;
+}
+@media screen and (max-width: 540px) {
+    #ir_password_link_block {
+        flex-direction: column;
+    }
+    #ir_password_link_block input {
+        width: 100%;
+    }
+    #ir_password_link_block button {
+        align-self: flex-end;
+        margin: 6px 0 0;
+        padding: 8px 32px;
+    }
+}
+    </style>
+</form></template>
+
+<style>
+html {
+    background-color: #f9f9f9;
+    background: linear-gradient(45deg, #fcfcfc 25%, transparent 25%, transparent 75%, #fcfcfc 75%),
+                linear-gradient(45deg, #fcfcfc 25%, transparent 25%, transparent 75%, #fcfcfc 75%);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+}
+body {
+    margin: 0;
+}
+header {
+    background-color: #f9f9f9;
+    padding: .5rem 1rem;
+    color: #333;
+}
+header h1 {
+    display: inline;
+    font-size: 100%;
+    font-weight: normal;
+    margin: 0;
+}
+main {
+    max-width: 1000px;
+    margin: 8px auto;
+    padding: 4px;
+}
+h2 {
+    color: #999;
+    margin-top: 2em;
+}
+#settings ul {
+    border: 1px solid #eee;
+    background-color: white;
+    padding: 1em 2em;
+}
+#settings input {
+    max-width: 100%;
+}
+#settings input:invalid {
+    border: 2px solid #f60;
+    border-width: 1px 3px;
+}
+#settings .input-error {
+    display: none;
+    color: #f60;
+}
+#settings input:invalid ~ .input-error {
+    display: block;
+}
+#thumbnail-place {
+    border: 1px solid #eee;
+    background-color: white;
+    padding: 4px;
+}
+#output-place {
+    border: 1px solid #666;
+    background-color: white;
+    width: 100%;
+    height: 10em;
+    resize: vertical;
+    box-sizing: border-box;
+}
+</style>
+
+<header>
+    <h1>パスワード付きリンク生成ツール</h1>
+</header>
+
+<main>
+    <div id=settings>
+        <h2>設定</h2>
+        <ul>
+            <li><label>入力欄のラベル: <input id=input-label value="パスワード" /></label></li>
+            <li><label>ボタンのラベル: <input id=button-label value="視聴する" required /><span class="input-error">ボタンに表示するラベルを入力してください</span></label></li>
+            <li><label>転送先のURL: <input id=url type="url" value="https://" placeholder="https://" required size=60 /><span class="input-error">https:// から始まる正しいURLを入力してください</span></label></li>
+            <li><label>パスワード: <input id=password type=password required maxlength=16 minlength=1 /><span class="input-error">パスワードを入力してください</span></label></li>
+        </ul>
+    </div>
+
+    <div id=thumbnail>
+        <h2>プレビュー</h1>
+        <div id=thumbnail-place></div>
+    </div>
+
+    <div id=output>
+        <h2>埋め込みコード</h1>
+        <pre><textarea id=output-place readonly></textarea></pre>
+    </div>
+</main>
+
+<script>
+const thumbnailElm = document.getElementById('thumbnail-place');
+const outputElm = document.getElementById('output-place');
+
+const inputLabelElm = document.getElementById('input-label');
+const buttonLabelElm = document.getElementById('button-label');
+const urlElm = document.getElementById('url');
+const passwordElm = document.getElementById('password');
+
+let encryptedPassword = '';
+
+function update() {
+    const code = Mustache.render(document.getElementById('template').innerHTML, {
+        inputLabel: inputLabelElm.value,
+        buttonLabel: buttonLabelElm.value,
+        encryptedPassword: encryptedPassword,
+    });
+    thumbnailElm.innerHTML = code;
+
+    if (buttonLabelElm.validity.valid && urlElm.validity.valid && passwordElm.validity.valid) {
+        outputElm.value = code;
+    } else {
+        outputElm.value = "";
+    }
+}
+
+function updatePassword() {
+    if (!urlElm.value.startsWith('https://')) {
+        urlElm.setCustomValidity('https:// から始まるURLを入力してください');
+    } else {
+        urlElm.setCustomValidity('');
+    }
+
+    const password = passwordElm.value.padEnd(16, ' ');
+    const key = aesjs.utils.utf8.toBytes(password);
+
+    const aesEnc = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5));
+    const encryptedBytes = aesEnc.encrypt(aesjs.utils.utf8.toBytes(urlElm.value));
+    encryptedPassword = aesjs.utils.hex.fromBytes(encryptedBytes);
+
+    update();
+}
+
+inputLabelElm.addEventListener('change', update);
+inputLabelElm.addEventListener('input', update);
+buttonLabelElm.addEventListener('change', update);
+buttonLabelElm.addEventListener('input', update);
+urlElm.addEventListener('change', updatePassword);
+urlElm.addEventListener('input', updatePassword);
+passwordElm.addEventListener('change', updatePassword);
+passwordElm.addEventListener('input', updatePassword);
+
+outputElm.addEventListener('focus',() => {
+    outputElm.setSelectionRange(0, -1);
+});
+
+updatePassword();
+</script>
+</body>
+</html>
