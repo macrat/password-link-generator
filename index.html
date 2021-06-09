@@ -10,16 +10,16 @@
 </head>
 
 <body>
-<template id=template><form id="ir_password_link_block">
+<template id=template><form id="password_link_block">
     <label>{{ inputLabel }} <input type="password" /></label>
     <button type="submit">{{ buttonLabel }}</button>
 
     <script type="text/javascript" src="https://unpkg.com/aes-js@3.1.2/index.js"></script>
     <script>
-document.querySelector('#ir_password_link_block').addEventListener('submit', function irPasswordLinkBlockOnSubmit(event) {
+document.querySelector('#password_link_block').addEventListener('submit', function irPasswordLinkBlockOnSubmit(event) {
   event.preventDefault();
 
-  const password = document.querySelector('#ir_password_link_block input').value.padEnd(16, ' ');
+  const password = document.querySelector('#password_link_block input').value.padEnd(16, ' ');
   if (!password) {
     alert('パスワードを入力してください。');
     return;
@@ -43,18 +43,18 @@ document.querySelector('#ir_password_link_block').addEventListener('submit', fun
     </script>
 
     <style>
-#ir_password_link_block {
+#password_link_block {
     margin: 1rem 0;
     display: flex;
     justify-content: center;
     align-items: stretch;
 }
-#ir_password_link_block input {
+#password_link_block input {
     box-sizing: border-box;
     font-size: 100%;
     padding: 6px 14px;
 }
-#ir_password_link_block button {
+#password_link_block button {
     background-color: #dd000c;
     color: white;
     font-size: 100%;
@@ -63,17 +63,17 @@ document.querySelector('#ir_password_link_block').addEventListener('submit', fun
     border: none;
     margin: 0 0 0 4px;
 }
-#ir_password_link_block button:hover {
+#password_link_block button:hover {
     opacity: .7;
 }
 @media screen and (max-width: 540px) {
-    #ir_password_link_block {
+    #password_link_block {
         flex-direction: column;
     }
-    #ir_password_link_block input {
+    #password_link_block input {
         width: 100%;
     }
-    #ir_password_link_block button {
+    #password_link_block button {
         align-self: flex-end;
         margin: 6px 0 0;
         padding: 8px 32px;
