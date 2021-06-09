@@ -202,7 +202,7 @@ function update() {
     previewElm.innerHTML = code;
 
     if (buttonLabelElm.validity.valid && urlElm.validity.valid && passwordElm.validity.valid) {
-        outputElm.value = code;
+        outputElm.value = code.replace(/[\n\t ]+/g, ' ');
     } else {
         outputElm.value = "";
     }
