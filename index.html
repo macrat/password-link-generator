@@ -132,7 +132,7 @@ h2 {
 #settings input:invalid ~ .input-error {
     display: block;
 }
-#thumbnail-place {
+#preview-place {
     border: 1px solid #eee;
     background-color: white;
     padding: 4px;
@@ -171,9 +171,9 @@ h2 {
         </ul>
     </div>
 
-    <div id=thumbnail>
+    <div id=preview>
         <h2>プレビュー</h1>
-        <div id=thumbnail-place></div>
+        <div id=preview-place></div>
     </div>
 
     <div id=output>
@@ -183,7 +183,7 @@ h2 {
 </main>
 
 <script>
-const thumbnailElm = document.getElementById('thumbnail-place');
+const previewElm = document.getElementById('preview-place');
 const outputElm = document.getElementById('output-place');
 
 const inputLabelElm = document.getElementById('input-label');
@@ -199,7 +199,7 @@ function update() {
         buttonLabel: buttonLabelElm.value,
         encryptedPassword: encryptedPassword,
     });
-    thumbnailElm.innerHTML = code;
+    previewElm.innerHTML = code;
 
     if (buttonLabelElm.validity.valid && urlElm.validity.valid && passwordElm.validity.valid) {
         outputElm.value = code;
